@@ -2,6 +2,7 @@
 docker-library.json
 names.json
 config
+buildlist
 docker-library/*
 nodejs/*
 nginxinc/*

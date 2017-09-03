@@ -27,7 +27,7 @@ function select_repo()
     cd "$BASEDIR"
     curl -s "https://api.github.com/users/docker-library/repos?per_page=1000" > docker-library.json
     jq -c '.[] | [{name,full_name}]' docker-library.json |grep -v -f excludes|grep -v -f todo.excludes |sed -f update.sed > names.json
-    
+
     local _repoList=( $(jq -r '.[] | "\(.full_name) off"' names.json) )
     local _repo=""
     until [ ! $_repo = "" ]; do
@@ -94,20 +94,20 @@ function check_baseImage()
     return 0
 }
 function select_baseimage()
-{ 
+{
     local _repo=$1
     local _dockerfiles=$(find "$_repo" -name Dockerfile -exec grep "FROM" {} +\
         |grep -vF "onbuild"| grep -vF "wheezy"| grep -vF "stretch"| grep -vF "backports"\
         |grep -viF "microsoft"| grep -viF "windows"\
         |cut -d: -f2-|sort|uniq)
     local _A36only="$(jq -r '.[] | select(.repo == "'"$_repo"'")|.A36only' config.json)"
-    
+
     if [[ "$_A36only" = "1" ]]; then
         _dockerfiles=$(echo "${_dockerfiles[@]}"|grep -v "alpine:3.4")
         _dockerfiles=$(echo "${_dockerfiles[@]}"|grep -v "alpine:3.5")
     fi
     _dockerfiles=($(echo "${_dockerfiles[@]}"|awk '{ print $2" \"\"\n"}'))
-    
+
     local _baseImage=""
     until [ ! "$_baseImage" = "" ]; do
         _baseImage=$(whiptail --title "Build Menu" --noitem --menu "Select baseImage" 20 48 12 "${_dockerfiles[@]}" 3>&2 2>&1 1>&3)||exit 1;
@@ -132,7 +132,7 @@ function create_buildlist()
 function build_baseimage()
 {
     local _repo=$1
-    
+
     cd  "$BASEDIR"
     [ -f TIMEZONE ] && cp TIMEZONE "$_repo"/TIMEZONE
     cd "$_repo"
@@ -155,7 +155,7 @@ function patch_dockerfiles()
         echo "s_alpine:latest_alpine:3.5_" > patch
         find "$_repo" -name Dockerfile -exec sed -i -f patch {} +
     fi
-    rm patch    
+    rm patch
 }
 function get_tags()
 {

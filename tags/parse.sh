@@ -37,7 +37,8 @@ function parse()
                         _tag=$tag
                     ;;
                     *)
-                        _tag=$(echo $tag| sed 's/^".\+-/"$_v-/')
+                        _tag=$(echo $tag| cut -d- -f2-)
+                        _tag="\"\$_v-$_tag"
                         _v=${tag/_tag//}
                     ;;
                 esac
