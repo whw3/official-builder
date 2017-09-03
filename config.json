@@ -1,0 +1,69 @@
+[
+    {   "repo":"docker-library/drupal",
+        "name":"drupal",
+        "patch":[
+            {"value":"s_FROM php_FROM whw3/php_"}
+        ]
+    },
+    {   "repo":"docker-library/php",
+        "name":"php",
+        "A36only":"0",
+        "patch":[
+            {"value":"s_ENTRYPOINT \\[\"docker-php-entrypoint\"\\]_ENTRYPOINT \\[\"/init\"\\]_"}
+        ]
+    },
+    {   "repo":"docker-library/golang",
+        "name":"golang",
+        "A36only":"1"
+    },
+    {   "repo":"docker-library/python",
+        "name":"python"
+    },
+    {   "repo":"nginxinc/docker-nginx",
+        "name":"nginx"
+    },
+    {   "repo":"nodejs/docker-node",
+        "name":"node"
+    },
+    {   "repo":"docker-library/ghost",
+        "name":"ghost",
+        "patch":[
+            {"value":"s_FROM node_FROM whw3/node_"}
+        ]
+    },
+    {   "repo":"docker-library/haproxy",
+        "name":"haproxy"
+    },
+    {   "repo":"docker-library/wordpress",
+        "name":"wordpress",
+        "patch":[
+            {"value":"s_FROM php_FROM whw3/php_"}
+        ]
+    },
+    {   "repo":"docker-library/ruby",
+        "name":"ruby"
+    },
+    {   "repo":"docker-library/httpd",
+        "name":"httpd",
+        "A36only":"1"
+    },    
+    {   "repo":"docker-library/julia",
+        "name":"julia",
+        "patch":[
+            {"value":"s:x64:arm:g"},
+            {"value":"s:x86_64:arm:g"}
+        ]
+    },
+    {   "name":"postgres",
+        "repo":"docker-library/postgres"
+    },
+    {   "name":"caddy",
+        "repo":"abiosoft/caddy-docker",
+        "patch":[
+            {"value":"s_amd64_arm7_"},
+            {"value":"s_http.git_http.expires,http.git,http.minify,http.realip_"},
+            {"value":"s_ENTRYPOINT \\[\"/usr/bin/caddy\"\\]_ENTRYPOINT \\[\"/init\"\\]_"},
+            {"value":"s_CMD \\[\"--conf\", \"/etc/Caddyfile\", \"--log\", \"stdout\"\\]_CMD \\[\"caddy\", \"-quic\", \"--conf\", \"/etc/Caddyfile\"\\]_"}
+        ]
+    }
+]

@@ -1,0 +1,11 @@
+*~
+docker-library.json
+names.json
+docker-library/*
+nodejs/*
+nginxinc/*
+whw3/*
+abiosoft/*
+TIMEZONE
+*(copy)*
+tags/*.json
