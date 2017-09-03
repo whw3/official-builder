@@ -1,6 +1,7 @@
 *~
 docker-library.json
 names.json
+config
 docker-library/*
 nodejs/*
 nginxinc/*
