@@ -40,6 +40,7 @@ function parse()
                         _tag=$(echo $tag| cut -d- -f2-)
                         _tag="\"\$_v-$_tag"
                         _v=${tag/_tag//}
+                        _tag=$tag
                     ;;
                 esac
                 echo -n "{\"tag\":$_tag}"
@@ -58,17 +59,45 @@ function parse()
     done <"$_name.tags"
     echo "]"
 }
+
+### Begin Main ###
+TAGS_DIR=$(cd "$( dirname "$0" )" && pwd)
+# A POSIX variable
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+verbose=0
+SINGLE_TAG=''
+while getopts "vft:" opt; do
+    case "$opt" in
+    v)  verbose=1
+        ;;
+    f)  echo "forcing pull of new tags"
+        rm $TAGS_DIR/*.json
+        ;;
+    t)  SINGLE_TAG=$OPTARG
+    esac
+done
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+
 echo "Checking Tags..."
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 for name in $(jq -r '.[]|"\(.name)"' ../names.json); do
-    echo -n "$name : "
-    update="0"
-    if [[ ! -e "$name.json" ]]; then
-        update="1"
-    else
-        if (( "$(date -r $name.json +%s)" <= "$(date -d 'now - 30 minutes' +%s)" )); then
+    if [[ -z $SINGLE_TAG ]]; then
+        echo -n "$name : "
+        update="0"
+        if [[ ! -e "$name.json" ]]; then
             update="1"
+        else
+            if (( "$(date -r $name.json +%s)" <= "$(date -d 'now - 30 minutes' +%s)" )); then
+                update="1"
+            fi
         fi
+    elif [[ "$SINGLE_TAG" != "$name" ]]; then
+        continue;
+    else
+        echo -n "$name : "
+        update="1"
     fi
     if [[ "$update" = "1" ]]; then
         echo -n "updating..."
@@ -91,6 +120,8 @@ EOF
             ;;
         esac
         case $name in
+            mariadb)
+            ;;
             postgres)
             ;;
             *)
