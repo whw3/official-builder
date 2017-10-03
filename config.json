@@ -46,7 +46,7 @@
     {   "repo":"docker-library/httpd",
         "name":"httpd",
         "A36only":"1"
-    },    
+    },
     {   "repo":"docker-library/julia",
         "name":"julia",
         "patch":[
@@ -57,11 +57,13 @@
     {   "name":"postgres",
         "repo":"docker-library/postgres"
     },
+    {   "name":"mariadb",
+        "repo":"docker-library/mariadb"
+    },
     {   "name":"caddy",
         "repo":"abiosoft/caddy-docker",
         "patch":[
-            {"value":"s_amd64_arm7_"},
-            {"value":"s_http.git_http.expires,http.git,http.minify,http.realip_"},
+            {"value":"s_golang:1.9-alpine_whw3/golang:1.9-alpine_"},
             {"value":"s_ENTRYPOINT \\[\"/usr/bin/caddy\"\\]_ENTRYPOINT \\[\"/init\"\\]_"},
             {"value":"s_CMD \\[\"--conf\", \"/etc/Caddyfile\", \"--log\", \"stdout\"\\]_CMD \\[\"caddy\", \"-quic\", \"--conf\", \"/etc/Caddyfile\"\\]_"}
         ]
