@@ -52,6 +52,7 @@ function pull_repo()
     [[ -d "$_repo" ]] && rm -rf "$_repo"
     mkdir -p "$_repo"
     git clone https://github.com/"$_repo".git "$_repo"||return 1;
+    ./tags/parse.sh
     return 0
 }
 function check_baseImage()
@@ -145,6 +146,7 @@ function build_baseimage()
 function patch_dockerfiles()
 { ### patch ###
     local _repo=$1
+    local _dockerfile=$2
     echo "Patching:$_repo";
     find "$_repo" -name Dockerfile -exec sed -i -f patch.sed {} +
     if (jq -e -r '.[] | select(.repo == "'"$_repo"'")|.patch[].value' config.json > patch 2>/dev/null) ; then
@@ -178,7 +180,7 @@ function build()
     [[ "$_dockerfile_" = "Dockerfile" ]] && _dockerfile_="./$_dockerfile_"
     local _buildDir_="$_repo_/${_dockerfile_//\/Dockerfile/}"
     local _tags_=$(get_tags "$_repo_" "$_dockerfile_")
-    patch_dockerfiles "$_repo_"
+    patch_dockerfiles "$_repo_" "$_dockerfile_"
     #echo "bd:$_buildDir_:repo:$_repo_:Dockerfile:$_dockerfile_"
     echo "Building..."
     cd  "$_buildDir_"
